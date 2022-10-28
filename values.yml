@@ -4,3 +4,8 @@ dags:
     repo: https://github.com/getsynq/synq-dbt-airflow.git
     branch: main
     subPath: ""
+
+images:
+  airflow:
+    extraPipPackages:
+      - "airflow-dbt" 

@@ -3,7 +3,6 @@ from datetime import datetime
 from airflow import DAG
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators.python_operator import PythonOperator
-from airflow.operators import MultiplyBy5Operator
 
 def print_hello():
  return 'Hello Wolrd'
