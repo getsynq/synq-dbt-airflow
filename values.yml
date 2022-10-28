@@ -5,7 +5,7 @@ dags:
     branch: main
     subPath: ""
 
-images:
+worker:
   airflow:
     extraPipPackages:
       - "airflow-dbt" 
