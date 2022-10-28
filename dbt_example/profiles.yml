@@ -1,0 +1,13 @@
+# example profiles.yml file
+dbt_example:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: airflow-postgresql.airflow.svc.cluster.local
+      user: postgres
+      password: postgres
+      port: 5432
+      dbname: airflow
+      schema: dbt_example
+      threads: 4
