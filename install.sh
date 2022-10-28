@@ -1,11 +1,14 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+##
+helm repo add airflow-stable https://airflow-helm.github.io/charts
 
 ## set the release-name & namespace
 export AIRFLOW_NAME="airflow"
 export AIRFLOW_NAMESPACE="airflow"
 
 ## create the namespace
-kubectl create ns "$AIRFLOW_NAMESPACE"
+kubectl create ns "$AIRFLOW_NAMESPACE" || true
 
 ## install using helm 3
 helm upgrade --install \
@@ -13,4 +16,5 @@ helm upgrade --install \
   airflow-stable/airflow \
   --namespace "$AIRFLOW_NAMESPACE" \
   --version "8.6.1" \
-  --values ./values.yml
+  --values ./values.yml \
+  --wait
