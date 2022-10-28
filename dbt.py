@@ -7,7 +7,7 @@ from airflow_dbt.operators.dbt_operator import (
 )
 from airflow.utils.dates import days_ago
 
-default_args = {"dir": "/srv/app/dbt", "start_date": days_ago(0)}
+default_args = {"dir": "/opt/airflow/dags/repo/dbt_example", "start_date": days_ago(0)}
 
 with DAG(dag_id="dbt", default_args=default_args, schedule_interval="@daily") as dag:
 
