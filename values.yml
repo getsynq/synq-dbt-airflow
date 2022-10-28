@@ -1,6 +1,6 @@
 dags:
   gitSync:
     enabled: true
-    repo: git@github.com/getsynq/synq-dbt-airflow.git
+    repo: https://github.com/getsynq/synq-dbt-airflow.git
     branch: main
     subPath: ""
