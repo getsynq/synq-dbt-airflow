@@ -8,24 +8,20 @@ from airflow_dbt.operators.dbt_operator import (
 from airflow.utils.dates import days_ago
 
 default_args = {"dir": "/opt/airflow/dags/repo/dbt_example", "start_date": days_ago(0)}
+env = {"DBT_PROFILES_DIR": "/opt/airflow/dags/repo/dbt_example"}
 
 with DAG(dag_id="dbt", default_args=default_args, schedule_interval="@daily") as dag:
 
-    dbt_seed = DbtSeedOperator(
-        task_id="dbt_seed",
-    )
+    dbt_seed = DbtSeedOperator(task_id="dbt_seed", env=env)
 
-    dbt_snapshot = DbtSnapshotOperator(
-        task_id="dbt_snapshot",
-    )
+    dbt_snapshot = DbtSnapshotOperator(task_id="dbt_snapshot", env=env)
 
-    dbt_run = DbtRunOperator(
-        task_id="dbt_run",
-    )
+    dbt_run = DbtRunOperator(task_id="dbt_run", env=env)
 
     dbt_test = DbtTestOperator(
         task_id="dbt_test",
         retries=0,  # Failing tests would fail the task, and we don't want Airflow to try again
+        env=env,
     )
 
     dbt_seed >> dbt_snapshot >> dbt_run >> dbt_test
