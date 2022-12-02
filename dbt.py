@@ -10,7 +10,7 @@ from airflow.utils.dates import days_ago
 default_args = {
     "dir": "/opt/airflow/dags/repo/dbt_example",
     "start_date": days_ago(0),
-    "profiles_dirs": "/opt/airflow/dags/repo/dbt_example",
+    "profiles_dir": "/opt/airflow/dags/repo/dbt_example",
 }
 
 with DAG(dag_id="dbt", default_args=default_args, schedule_interval="@daily") as dag:

@@ -9,5 +9,6 @@ dbt_example:
       password: postgres
       port: 5432
       dbname: airflow
+      # dbname: localhost
       schema: dbt_example
       threads: 4

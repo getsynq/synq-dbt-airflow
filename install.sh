@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 ##
 helm repo add airflow-stable https://airflow-helm.github.io/charts
 
