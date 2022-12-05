@@ -1,5 +1,6 @@
 dags:
   gitSync:
+    # Docs https://github.com/airflow-helm/charts/blob/main/charts/airflow/values.yaml#L1305
     enabled: true
     repo: https://github.com/getsynq/synq-dbt-airflow.git
     branch: main
