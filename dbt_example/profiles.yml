@@ -6,7 +6,7 @@ dbt_example:
       type: postgres
       host: airflow-postgresql.airflow.svc.cluster.local
       user: postgres
-      password: postgres
+      password: airflow
       port: 5432
       dbname: airflow
       # dbname: localhost
