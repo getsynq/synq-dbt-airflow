@@ -10,7 +10,6 @@ export AIRFLOW_NAME="airflow"
 export AIRFLOW_NAMESPACE="airflow"
 
 ## create the namespace
-kubectl create ns "$AIRFLOW_NAMESPACE" || true
 
 ## install using helm 3
 helm upgrade --install \
@@ -19,4 +18,5 @@ helm upgrade --install \
   --namespace "$AIRFLOW_NAMESPACE" \
   --version "8.6.1" \
   --values ./values.yml \
+  --create-namespace \
   --wait
