@@ -54,6 +54,8 @@ This can take a while (5 minutes).
 
 TBD
 
+## How to use
+
 ### Connect to Airflow instance
 
 To connect to Airflow in Kubernetes we have to port forward.
@@ -85,3 +87,8 @@ You can now use your database client to inspect the database.
 
 
 ![Database](doc/img/psql.jpg)
+
+## Deletion
+
+If you want to delete the whole setup, you just need to delete the kind cluster with:
+`kind delete cluster`
