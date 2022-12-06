@@ -1,4 +1,5 @@
 from airflow import DAG
+from airflow.models import Variable
 from airflow_dbt.operators.dbt_operator import (
     DbtSeedOperator,
     DbtSnapshotOperator,
@@ -6,6 +7,8 @@ from airflow_dbt.operators.dbt_operator import (
     DbtTestOperator,
 )
 from airflow.utils.dates import days_ago
+
+synq_token = Variable.get("synq_token")
 
 default_args = {
     "dir": "/opt/airflow/dags/repo/dbt_example",
