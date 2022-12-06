@@ -38,7 +38,7 @@ Before we install it you might want to edit [the Helm values.yml file](values.ym
 ```bash
 # Add the airflow helm repository
 helm repo add airflow-stable https://airflow-helm.github.io/charts
-# Install Airflow with helm using the values from values.yml
+# Install/upgrade Airflow with helm using the values from values.yml
 helm upgrade --install \
   "$AIRFLOW_NAME" \
   airflow-stable/airflow \
@@ -50,9 +50,50 @@ helm upgrade --install \
 ```
 This can take a while (5 minutes).
 
-### install Synq dbt
+### Install Synq dbt
 
-TBD
+#### Get the Synq dbt wrapper
+
+To integrate with synq, you have to install the dbt wrapper program from synq. https://github.com/getsynq/synq-dbt
+
+First let us install the binary. The easiest way to install the binary is to download it to the persistent volume shared across Airflow pods.
+
+
+Connect to airflow-web, download the latest synq-dbt
+```bash
+export SYNQ_VERSION="v1.0.placeholder"
+kubectl -n airflow exec -it deploy/airflow-web -c airflow-web  -- bash
+mkdir bin
+cd bin
+curl -O https://github.com/getsynq/synq-dbt/releases/download/${SYNQ_VERSION}/synq-dbt-amd64-linux
+mv synq-dbt-amd64-linux synq-dbt
+chmod +x ./synq-dbt
+```
+
+#### Set the Synq token
+
+The Synq dbt wrapper needs `SYNQ_TOKEN` to be set. The airflow dbt plugin is currently not supporting `env` passing via the `Dbt*` operators. So we have to set the `SYNQ_TOKEN` in 2 places:
+
+Firstly, set the variable `SYNQ_TOKEN` in Airflow. In the top navbar go to **Admin -> Variables** and add a new variable:
+
+
+![Synq variable token](doc/img/synq_variable.jpg)
+
+Secondly, set the token as environment variable for the pods. This will only be needed until the dbt airflow plugin releases a new version.
+
+Edit [the Helm values.yml file](values.yml) and update the token. Then upgrade the airflow release.
+
+```bash
+# Upgrade Airflow with helm using the values from values.yml
+helm upgrade --install \
+  "$AIRFLOW_NAME" \
+  airflow-stable/airflow \
+  --namespace "$AIRFLOW_NAMESPACE" \
+  --version "8.6.1" \
+  --values ./values.yml \
+  --create-namespace \
+  --wait
+```
 
 ## How to use
 

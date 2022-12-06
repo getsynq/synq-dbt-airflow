@@ -9,7 +9,7 @@ from airflow_dbt.operators.dbt_operator import (
 from airflow.operators.python import ShortCircuitOperator
 from airflow.utils.dates import days_ago
 
-synq_token = Variable.get("synq_token", default_var=None)
+synq_token = Variable.get("SYNQ_TOKEN", default_var=None)
 
 default_args = {
     "dir": "/opt/airflow/dags/repo/dbt_example",
@@ -36,6 +36,12 @@ with DAG(dag_id="dbt", default_args=default_args, schedule_interval="@daily") as
     )
 
     dbt_seed >> dbt_snapshot >> dbt_run >> dbt_test
+
+
+default_args_synq = default_args.copy()
+default_args_synq.update(
+    {"env": {"SYNQ_TOKEN": synq_token}, "bin": "/opt/airflow/bin/synq-dbt"}
+)
 
 # Dbt reporting to synq
 with DAG(
