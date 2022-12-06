@@ -40,7 +40,7 @@ with DAG(dag_id="dbt", default_args=default_args, schedule_interval="@daily") as
 
 default_args_synq = default_args.copy()
 default_args_synq.update(
-    {"env": {"SYNQ_TOKEN": synq_token}, "bin": "/opt/airflow/bin/synq-dbt"}
+    {"env": {"SYNQ_TOKEN": synq_token}, "dbt_bin": "/opt/airflow/bin/synq-dbt"}
 )
 
 # Dbt reporting to synq
