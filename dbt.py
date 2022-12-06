@@ -40,7 +40,7 @@ with DAG(dag_id="dbt", default_args=default_args, schedule_interval="@daily") as
 # Dbt reporting to synq
 with DAG(
     dag_id="dbt_with_synq", default_args=default_args, schedule_interval="@daily"
-) as dag:
+) as dag_synq:
     # We need the synq tooken for synq integrated dags
     synq_token_defined = ShortCircuitOperator(
         task_id="synq_token_defined", python_callable=lambda: synq_token
