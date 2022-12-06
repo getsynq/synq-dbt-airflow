@@ -45,7 +45,7 @@ default_args_synq.update(
 
 # Dbt reporting to synq
 with DAG(
-    dag_id="dbt_with_synq", default_args=default_args, schedule_interval="@daily"
+    dag_id="dbt_with_synq", default_args=default_args_synq, schedule_interval="@daily"
 ) as dag_synq:
     # We need the synq tooken for synq integrated dags
     synq_token_defined = ShortCircuitOperator(
