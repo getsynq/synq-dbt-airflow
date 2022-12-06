@@ -45,15 +45,15 @@ with DAG(
     synq_token_defined = ShortCircuitOperator(
         task_id="synq_token_defined", python_callable=lambda: synq_token
     )
-    dbt_seed = DbtSeedOperator(task_id="dbt_seed")
+    dbt_seed = DbtSeedOperator(task_id="dbt_seed_synq")
 
-    dbt_snapshot = DbtSnapshotOperator(task_id="dbt_snapshot")
+    dbt_snapshot = DbtSnapshotOperator(task_id="dbt_snapshot_synq")
 
-    dbt_run = DbtRunOperator(task_id="dbt_run")
+    dbt_run = DbtRunOperator(task_id="dbt_run_synq")
 
     dbt_test = DbtTestOperator(
-        task_id="dbt_test",
+        task_id="dbt_test_synq",
         retries=0,  # Failing tests would fail the task, and we don't want Airflow to try again
     )
 
-    dbt_seed >> dbt_snapshot >> dbt_run >> dbt_test
+    synq_token_defined >> dbt_seed >> dbt_snapshot >> dbt_run >> dbt_test
