@@ -60,6 +60,8 @@ with DAG(
         if not os.path.exists("/opt/airflow/bin"):
             os.makedirs("/opt/airflow/bin")
 
+        if os.path.exists("/opt/airflow/bin/synq-dbt"):
+            os.remove("/opt/airflow/bin/synq-dbt")
         urllib.request.urlretrieve(URL, "/opt/airflow/bin/synq-dbt")
         os.chmod("/opt/airflow/bin/synq-dbt", stat.S_IXUSR)
 
