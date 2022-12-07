@@ -52,23 +52,15 @@ This can take a while (5 minutes).
 
 ### Install Synq dbt
 
-#### Get the Synq dbt wrapper
+#### Get the Synq dbt wrapper binary
 
 To integrate with synq, you have to install the dbt wrapper program from synq. https://github.com/getsynq/synq-dbt
 
-First let us install the binary. The easiest way to install the binary is to download it to the persistent volume shared across Airflow pods.
+For production we recommend you add the `synq-dbt` binary to the Airflow image with other dependencies that you need to run your DAGs.
 
+In this example repository we have created a DAG that installs the synq dbt on to the worker, but it will not persist if the worker is restarted.
 
-Connect to airflow-web, download the latest synq-dbt
-```bash
-export SYNQ_VERSION="v1.0.placeholder"
-kubectl -n airflow exec -it deploy/airflow-web -c airflow-web  -- bash
-mkdir bin
-cd bin
-curl -O https://github.com/getsynq/synq-dbt/releases/download/${SYNQ_VERSION}/synq-dbt-amd64-linux
-mv synq-dbt-amd64-linux synq-dbt
-chmod +x ./synq-dbt
-```
+To install it just run the `dag_install_synq_dbt` DAG
 
 #### Set the Synq token
 
