@@ -24,6 +24,11 @@ default_args = {
     "profiles_dir": "/opt/airflow/dags/repo/dbt_example",
 }
 
+default_args_synq = default_args.copy()
+default_args_synq.update(
+    {"env": {"SYNQ_TOKEN": synq_token}, "dbt_bin": "/opt/airflow/bin/synq-dbt"}
+)
+
 ###
 # DAGs
 ###
@@ -53,17 +58,19 @@ with DAG(
 ) as dag_install_synq_dbt:
 
     def install_synq_dbt_f():
+        dbt_bin = default_args_synq["dbt_bin"]
+        dbt_bin_dir = os.path.dirname(dbt_bin)
 
         SYNQ_VERSION = Variable.get("SYNQ_VERSION", "v1.2.3")
         URL = f"https://github.com/getsynq/synq-dbt/releases/download/{SYNQ_VERSION}/synq-dbt-amd64-linux"
 
-        if not os.path.exists("/opt/airflow/bin"):
-            os.makedirs("/opt/airflow/bin")
+        if not os.path.exists(dbt_bin_dir):
+            os.makedirs(dbt_bin_dir)
 
-        if os.path.exists("/opt/airflow/bin/synq-dbt"):
-            os.remove("/opt/airflow/bin/synq-dbt")
-        urllib.request.urlretrieve(URL, "/opt/airflow/bin/synq-dbt")
-        os.chmod("/opt/airflow/bin/synq-dbt", stat.S_IXUSR)
+        if os.path.exists(dbt_bin):
+            os.remove(dbt_bin)
+        urllib.request.urlretrieve(URL, dbt_bin)
+        os.chmod(dbt_bin, stat.S_IXUSR)
 
     install_synq_dbt = PythonOperator(
         task_id="install_synq_dbt", python_callable=install_synq_dbt_f
@@ -73,10 +80,6 @@ with DAG(
 ##
 # Dbt reporting to synq
 ##
-default_args_synq = default_args.copy()
-default_args_synq.update(
-    {"env": {"SYNQ_TOKEN": synq_token}, "dbt_bin": "/opt/airflow/bin/synq-dbt"}
-)
 
 with DAG(
     dag_id="dbt_with_synq", default_args=default_args_synq, schedule_interval="@daily"
