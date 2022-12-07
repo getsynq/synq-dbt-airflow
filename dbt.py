@@ -49,15 +49,19 @@ with DAG(dag_id="dbt", default_args=default_args, schedule_interval="@daily") as
 # For production you can add SYNQ dbt to your airflow Docker image at image build time
 ##
 with DAG(
-    dag_id="dag_install_synq_dbt", default_args=default_args
+    dag_id="dag_install_synq_dbt", default_args=default_args, schedule_interval=None
 ) as dag_install_synq_dbt:
 
     def install_synq_dbt_f():
 
         SYNQ_VERSION = Variable.get("SYNQ_VERSION", "v1.2.3")
         URL = f"https://github.com/getsynq/synq-dbt/releases/download/{SYNQ_VERSION}/synq-dbt-amd64-linux"
-        urllib.request.urlretrieve(URL, "/opt/airflow/.local/bin/synq-dbt")
-        os.chmod("/opt/airflow/.local/bin/synq-dbt", stat.S_IXUSR)
+
+        if not os.path.exists("/opt/airflow/bin"):
+            os.makedirs("/opt/airflow/bin")
+
+        urllib.request.urlretrieve(URL, "/opt/airflow/bin/synq-dbt")
+        os.chmod("/opt/airflow/bin/synq-dbt", stat.S_IXUSR)
 
     install_synq_dbt = PythonOperator(
         task_id="install_synq_dbt", python_callable=install_synq_dbt_f
