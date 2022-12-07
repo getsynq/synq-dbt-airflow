@@ -1,3 +1,7 @@
+import os
+import stat
+import urllib.request
+
 from airflow import DAG
 from airflow.models import Variable
 from airflow_dbt.operators.dbt_operator import (
@@ -6,7 +10,10 @@ from airflow_dbt.operators.dbt_operator import (
     DbtRunOperator,
     DbtTestOperator,
 )
-from airflow.operators.python import ShortCircuitOperator
+from airflow.operators.python import (
+    ShortCircuitOperator,
+    PythonOperator,
+)
 from airflow.utils.dates import days_ago
 
 synq_token = Variable.get("SYNQ_TOKEN", default_var=None)
@@ -37,13 +44,32 @@ with DAG(dag_id="dbt", default_args=default_args, schedule_interval="@daily") as
 
     dbt_seed >> dbt_snapshot >> dbt_run >> dbt_test
 
+##
+# Install latest Synq dbt
+# For production you can add SYNQ dbt to your airflow Docker image at image build time
+##
+with DAG() as dag_install_synq_dbt:
 
+    def install_synq_dbt_f():
+
+        SYNQ_VERSION = Variable.get("SYNQ_VERSION", "v1.2.3")
+        URL = f"https://github.com/getsynq/synq-dbt/releases/download/{SYNQ_VERSION}/synq-dbt-amd64-linux"
+        urllib.request.urlretrieve(URL, "/opt/airflow/.local/bin/synq-dbt")
+        os.chmod("/opt/airflow/.local/bin/synq-dbt", stat.S_IXUSR)
+
+    install_synq_dbt = PythonOperator(
+        task_id="install_synq_dbt", python_callable=install_synq_dbt_f
+    )
+
+
+##
+# Dbt reporting to synq
+##
 default_args_synq = default_args.copy()
 default_args_synq.update(
     {"env": {"SYNQ_TOKEN": synq_token}, "dbt_bin": "/opt/airflow/bin/synq-dbt"}
 )
 
-# Dbt reporting to synq
 with DAG(
     dag_id="dbt_with_synq", default_args=default_args_synq, schedule_interval="@daily"
 ) as dag_synq:
@@ -51,6 +77,7 @@ with DAG(
     synq_token_defined = ShortCircuitOperator(
         task_id="synq_token_defined", python_callable=lambda: synq_token
     )
+
     dbt_seed = DbtSeedOperator(task_id="dbt_seed_synq")
 
     dbt_snapshot = DbtSnapshotOperator(task_id="dbt_snapshot_synq")
