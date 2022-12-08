@@ -14,6 +14,8 @@ from airflow.operators.python import (
     ShortCircuitOperator,
     PythonOperator,
 )
+
+from airflow.operators.trigger_dagrun import TriggerDagRunOperator
 from airflow.utils.dates import days_ago
 
 synq_token = Variable.get("SYNQ_TOKEN", default_var=None)
@@ -89,6 +91,10 @@ with DAG(
         task_id="synq_token_defined", python_callable=lambda: synq_token
     )
 
+    install_synq_dbt = TriggerDagRunOperator(
+        task_id="install_synq_dby", trigger_dag_id="", wait_for_completion=True
+    )
+
     dbt_seed = DbtSeedOperator(task_id="dbt_seed_synq")
 
     dbt_snapshot = DbtSnapshotOperator(task_id="dbt_snapshot_synq")
@@ -100,4 +106,11 @@ with DAG(
         retries=0,  # Failing tests would fail the task, and we don't want Airflow to try again
     )
 
-    synq_token_defined >> dbt_seed >> dbt_snapshot >> dbt_run >> dbt_test
+    (
+        synq_token_defined
+        >> install_synq_dbt
+        >> dbt_seed
+        >> dbt_snapshot
+        >> dbt_run
+        >> dbt_test
+    )
