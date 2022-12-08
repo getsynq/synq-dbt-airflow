@@ -56,7 +56,10 @@ with DAG(dag_id="dbt", default_args=default_args, schedule_interval="@daily") as
 # For production you can add SYNQ dbt to your airflow Docker image at image build time
 ##
 with DAG(
-    dag_id="dag_install_synq_dbt", default_args=default_args, schedule_interval=None
+    dag_id="dag_install_synq_dbt",
+    default_args=default_args,
+    schedule_interval=None,
+    is_paused_upon_creation=False,
 ) as dag_install_synq_dbt:
 
     def install_synq_dbt_f():
