@@ -58,9 +58,7 @@ To integrate with synq, you have to install the dbt wrapper program from synq. h
 
 For production we recommend you add the `synq-dbt` binary to the Airflow image with other dependencies that you need to run your DAGs.
 
-In this example repository we have created a DAG that installs the synq dbt on to the worker, but it will not persist if the worker is restarted.
-
-To install it just run the `dag_install_synq_dbt` DAG
+In this example repository we have created a DAG that installs the synq dbt on to the worker, but it will not persist if the worker is restarted. It's triggered as a part of dbt dag that sends data to synq.
 
 #### Set the Synq token
 
