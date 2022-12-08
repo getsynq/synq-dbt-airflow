@@ -92,7 +92,9 @@ with DAG(
     )
 
     install_synq_dbt = TriggerDagRunOperator(
-        task_id="install_synq_dby", trigger_dag_id="", wait_for_completion=True
+        task_id="install_synq_dby",
+        trigger_dag_id="dag_install_synq_dbt",
+        wait_for_completion=True,
     )
 
     dbt_seed = DbtSeedOperator(task_id="dbt_seed_synq")
