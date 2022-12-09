@@ -85,8 +85,8 @@ with DAG(
             "pushd /usr/app/dbt/dbt_project/repo; "
             "ls; "
             "pushd dbt_example ;"
-            "/usr/app/dbt/synqdbt run; "
-            "/usr/app/dbt/synqdbt test"
+            "/usr/app/dbt/bin/synqdbt run; "
+            "/usr/app/dbt/bin/synqdbt test"
         ],
         task_id="dbt_airflow_k8s",
         init_containers=[
