@@ -94,4 +94,5 @@ with DAG(
             dbt_project_volume_mount,
         ],
         volumes=[volume1, volume2],
+        is_delete_operator_pod=False,
     )
