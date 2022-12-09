@@ -79,9 +79,9 @@ with DAG(
         namespace="airflow-dbt",
         in_cluster=True,
         image="ghcr.io/dbt-labs/dbt-postgres:1.2.3",
-        cmds=["bash", "-cx"],
+        cmds=["bash", "-cex"],
         arguments=[
-            "pushd usr/app/dbt/dbt_project; "
+            "pushd /usr/app/dbt/dbt_project; "
             "/usr/app/dbt/synqdbt run; "
             "/usr/app/dbt/synqdbt test"
         ],
