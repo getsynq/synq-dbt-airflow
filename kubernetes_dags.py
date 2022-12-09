@@ -91,6 +91,7 @@ with DAG(
         env_vars={
             "SYNQ_TOKEN": synq_token,
             "SYNQ_UPLOAD_URL": "dbt-uploader-hcdlgjmqkq-lm.a.run.app:443",
+            "DBT_PROFILES_DIR": "/usr/app/dbt/dbt_project/repo/dbt_example",
         },
         init_containers=[
             init_container_install,
