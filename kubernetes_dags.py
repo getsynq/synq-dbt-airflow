@@ -20,6 +20,8 @@ default_args_synq.update(
     {"env": {"SYNQ_TOKEN": synq_token}, "dbt_bin": "/opt/airflow/bin/synq-dbt"}
 )
 
+volume1 = k8s.V1Volume(name="synqdbt-data", empty_dir=k8s.V1EmptyDirVolumeSource())
+volume2 = k8s.V1Volume(name="dbt-data", empty_dir=k8s.V1EmptyDirVolumeSource())
 
 synqdbt_volume_mount = k8s.V1VolumeMount(
     mount_path="/usr/app/dbt/synqdbt",
