@@ -46,6 +46,7 @@ init_container_gitsync = k8s.V1Container(
         "-repo=https://github.com/getsynq/synq-dbt-airflow.git",
         "-branch=main",
         "-root=/usr/app/dbt/dbt_project",
+        "-link=repo",
         "-one-time",
     ],
 )
@@ -81,7 +82,7 @@ with DAG(
         image="ghcr.io/dbt-labs/dbt-postgres:1.2.3",
         cmds=["bash", "-cex"],
         arguments=[
-            "pushd /usr/app/dbt/dbt_project; "
+            "pushd /usr/app/dbt/dbt_project/repo; "
             "ls; "
             "pushd dbt_example ;"
             "/usr/app/dbt/synqdbt run; "
