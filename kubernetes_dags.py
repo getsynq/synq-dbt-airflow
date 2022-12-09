@@ -72,7 +72,7 @@ init_container_install = k8s.V1Container(
 
 # Vanilla k8s
 with DAG(
-    dag_id="kubernetes", default_args=default_args, schedule_interval="@daily"
+    dag_id="kubernetes", default_args=default_args_synq, schedule_interval="@daily"
 ) as dag:
 
     task = KubernetesPodOperator(
