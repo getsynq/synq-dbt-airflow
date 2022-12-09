@@ -29,6 +29,8 @@ with DAG(
 
     task = KubernetesPodOperator(
         name="hello-dry-run",
+        namespace="airflow-dbt",
+        in_cluster=True,
         image="debian",
         cmds=["bash", "-cx"],
         arguments=["echo", "10"],
