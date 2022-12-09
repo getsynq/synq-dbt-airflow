@@ -45,7 +45,7 @@ init_container_gitsync = k8s.V1Container(
     args=[
         "-repo=https://github.com/getsynq/synq-dbt-airflow.git",
         "-root=/usr/app/dbt/dbt_project",
-        "-period=30s",
+        "-wait=30s",
     ],
 )
 
