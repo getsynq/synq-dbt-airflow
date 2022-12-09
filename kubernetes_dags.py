@@ -43,9 +43,9 @@ init_container_gitsync = k8s.V1Container(
     image="registry.k8s.io/git-sync/git-sync:v3.6.2",
     volume_mounts=[dbt_project_volume_mount],
     args=[
-        "--repo=https://github.com/getsynq/synq-dbt-airflow.git",
-        "--root=/usr/app/dbt/dbt_project",
-        "--period=30s",
+        "-repo=https://github.com/getsynq/synq-dbt-airflow.git",
+        "-root=/usr/app/dbt/dbt_project",
+        "-period=30s",
     ],
 )
 
@@ -57,7 +57,7 @@ init_container_install = k8s.V1Container(
     args=[
         (
             "apk add --no-cache wget; "
-            "SYNQ_VERSION=v1.2.3 wget -O ./synq-dbt https://github.com/getsynq/synq-dbt/releases/download/$SYNQ_VERSION/synq-dbt-amd64-linux; "
+            "wget -O ./synq-dbt https://github.com/getsynq/synq-dbt/releases/download/v1.2.3/synq-dbt-amd64-linux; "
             "chmod +x ./synq-dbt; "
             "mv ./synq-dbt /usr/app/dbt/synqdbt; "
         )
