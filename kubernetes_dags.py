@@ -24,7 +24,7 @@ volume1 = k8s.V1Volume(name="synqdbt-data", empty_dir=k8s.V1EmptyDirVolumeSource
 volume2 = k8s.V1Volume(name="dbt-data", empty_dir=k8s.V1EmptyDirVolumeSource())
 
 synqdbt_volume_mount = k8s.V1VolumeMount(
-    mount_path="/usr/app/dbt/synqdbt",
+    mount_path="/usr/app/dbt/bin",
     name="synqdbt-data",
     sub_path=None,
     read_only=False,
@@ -60,7 +60,7 @@ init_container_install = k8s.V1Container(
             "apk add --no-cache wget; "
             "wget -O ./synq-dbt https://github.com/getsynq/synq-dbt/releases/download/v1.2.3/synq-dbt-amd64-linux; "
             "chmod +x ./synq-dbt; "
-            "mv ./synq-dbt /usr/app/dbt/synqdbt; "
+            "mv ./synq-dbt /usr/app/dbt/bin/synqdbt; "
         )
     ],
 )
@@ -82,6 +82,8 @@ with DAG(
         cmds=["bash", "-cex"],
         arguments=[
             "pushd /usr/app/dbt/dbt_project; "
+            "ls; "
+            "pushd dbt_example ;"
             "/usr/app/dbt/synqdbt run; "
             "/usr/app/dbt/synqdbt test"
         ],
