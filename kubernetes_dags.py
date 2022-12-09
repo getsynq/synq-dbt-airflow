@@ -72,7 +72,7 @@ init_container_install = k8s.V1Container(
 
 # Vanilla k8s
 with DAG(
-    dag_id="kubernetes", default_args=default_args_synq, schedule_interval="@daily"
+    dag_id="kubernetes", default_args=default_args, schedule_interval="@daily"
 ) as dag:
 
     task = KubernetesPodOperator(
@@ -88,7 +88,10 @@ with DAG(
             "/usr/app/dbt/bin/synqdbt run; "
             "/usr/app/dbt/bin/synqdbt test"
         ],
-        task_id="dbt_airflow_k8s",
+        env_vars={
+            "SYNQ_TOKEN": synq_token,
+            "SYNQ_UPLOAD_URL": "dbt-uploader-hcdlgjmqkq-lm.a.run.app:443",
+        }
         init_containers=[
             init_container_install,
             init_container_gitsync,
@@ -99,4 +102,5 @@ with DAG(
         ],
         volumes=[volume1, volume2],
         is_delete_operator_pod=False,
+        task_id="dbt_airflow_k8s",
     )
