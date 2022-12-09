@@ -53,7 +53,7 @@ init_container_install = k8s.V1Container(
     name="init-container-install-synqdbt",
     image="alpine",
     volume_mounts=[synqdbt_volume_mount],
-    command=["bash", "-cx"],
+    command=["/bin/sh", "-cx"],
     args=[
         (
             "apk add --no-cache wget; "
