@@ -31,10 +31,9 @@ with DAG(
         name="hello-dry-run",
         namespace="airflow-dbt",
         in_cluster=True,
-        image="debian",
+        image="ghcr.io/dbt-labs/dbt-postgres:1.2.3",
         cmds=["bash", "-cx"],
-        arguments=["echo", "10"],
+        arguments=["dbt"],
         labels={"foo": "bar"},
         task_id="dry_run_demo",
-        do_xcom_push=True,
     )
