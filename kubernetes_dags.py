@@ -93,4 +93,5 @@ with DAG(
             synqdbt_volume_mount,
             dbt_project_volume_mount,
         ],
+        volumes=[volume1, volume2],
     )
