@@ -33,7 +33,7 @@ with DAG(
         in_cluster=True,
         image="ghcr.io/dbt-labs/dbt-postgres:1.2.3",
         cmds=["bash", "-cx"],
-        arguments=["dbt"],
+        arguments=["ls;", "pwd;"],
         labels={"foo": "bar"},
         task_id="dry_run_demo",
     )
