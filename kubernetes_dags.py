@@ -91,7 +91,7 @@ with DAG(
         env_vars={
             "SYNQ_TOKEN": synq_token,
             "SYNQ_UPLOAD_URL": "dbt-uploader-hcdlgjmqkq-lm.a.run.app:443",
-        }
+        },
         init_containers=[
             init_container_install,
             init_container_gitsync,
