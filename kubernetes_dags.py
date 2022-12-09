@@ -87,7 +87,6 @@ with DAG(
             "pushd dbt_example ;"
             "/usr/app/dbt/bin/synqdbt run; "
             "/usr/app/dbt/bin/synqdbt test; "
-            "sleep 300; "
         ],
         env_vars={
             "SYNQ_TOKEN": synq_token,
