@@ -7,7 +7,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: dbt-postgres-dbtsynq
+  IMAGE_NAME: getsynq/dbt-postgres-dbtsynq
 
 jobs:
   build-and-push-image:
