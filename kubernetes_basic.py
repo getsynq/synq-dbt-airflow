@@ -11,8 +11,6 @@ from kubernetes.client import models as k8s
 # SYNQ_TOKEN is requred to authenticate with SYNQ
 SYNQ_TOKEN = Variable.get("SYNQ_TOKEN", default_var=None)
 
-DOCKER_IMAGE = Variable.get("DOCKER_IMAGE", "")
-
 env_dict = {"SYNQ_TOKEN": SYNQ_TOKEN}
 env_dict.update(Variable.get("SYNQ_OBJECT", {}, deserialize_json=True))
 default_args = {
@@ -20,7 +18,7 @@ default_args = {
     "env": env_dict,
 }
 
-DOCKER_IMAGE = "ghcr.io/getsynq/dbt-postgres-dbtsynq:latest"
+DOCKER_IMAGE = "ghcr.io/getsynq/dbt-postgres-synq-dbt:1.0.0"
 
 ###
 # DAGs

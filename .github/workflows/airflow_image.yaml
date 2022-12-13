@@ -7,7 +7,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: getsynq/airflow-dbtsynq
+  IMAGE_NAME: getsynq/airflow-synq-dbt
 
 jobs:
   build-and-push-image:
