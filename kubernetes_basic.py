@@ -38,10 +38,9 @@ with DAG(
         namespace="airflow-dbt",
         in_cluster=True,
         image=DOCKER_IMAGE,
-        cmds=["bash", "-cex"],
-        arguments=["sleep 300"],
+        arguments=["run"],
         env_vars=env_dict,
-        is_delete_operator_pod=False,
+        is_delete_operator_pod=True,
     )
 
     test_task = KubernetesPodOperator(
