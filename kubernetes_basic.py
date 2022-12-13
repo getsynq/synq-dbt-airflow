@@ -20,7 +20,7 @@ default_args = {
     "env": env_dict,
 }
 
-DOCKER_IMAGE = "ghcr.io/getsynq/dbt-postgres-dbtsynq:v1.0-alpha.7"
+DOCKER_IMAGE = "ghcr.io/getsynq/dbt-postgres-dbtsynq:latest"
 
 ###
 # DAGs
