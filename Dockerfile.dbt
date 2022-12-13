@@ -1,5 +1,6 @@
 FROM ghcr.io/dbt-labs/dbt-postgres:1.2.3
 ENTRYPOINT ["synq-dbt"]
+WORKDIR /usr/app/
 ENV SYNQ_VERSION=v1.2.3
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
