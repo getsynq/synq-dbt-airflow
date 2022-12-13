@@ -27,10 +27,12 @@ DOCKER_IMAGE = "ghcr.io/getsynq/dbt-postgres-dbtsynq:v1.0-alpha.7"
 ###
 
 with DAG(
-    dag_id="kubernetes_dbt_run", default_args=default_args, schedule_interval="@daily"
+    dag_id="kubernetes_dbt_with_synq",
+    default_args=default_args,
+    schedule_interval="@daily",
 ) as dag_run:
 
-    task = KubernetesPodOperator(
+    run_task = KubernetesPodOperator(
         task_id="dbt_airflow_k8s_run",
         name="dbt-task-run",
         namespace="airflow-dbt",
@@ -41,11 +43,7 @@ with DAG(
         is_delete_operator_pod=True,
     )
 
-with DAG(
-    dag_id="kubernetes_dbt_test", default_args=default_args, schedule_interval="@daily"
-) as dag_test:
-
-    task = KubernetesPodOperator(
+    test_task = KubernetesPodOperator(
         task_id="dbt_airflow_k8s_run",
         name="dbt-task-run",
         namespace="airflow-dbt",
@@ -55,3 +53,5 @@ with DAG(
         env_vars=env_dict,
         is_delete_operator_pod=True,
     )
+
+    run_task >> test_task
