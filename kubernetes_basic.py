@@ -20,21 +20,38 @@ default_args = {
     "env": env_dict,
 }
 
+DOCKER_IMAGE = "ghcr.io/getsynq/dbt-postgres-dbtsynq:v1.0-alpha.7"
+
 ###
 # DAGs
 ###
 
 with DAG(
-    dag_id="kubernetes_advanced", default_args=default_args, schedule_interval="@daily"
-) as dag:
+    dag_id="kubernetes_dbt_run", default_args=default_args, schedule_interval="@daily"
+) as dag_run:
 
     task = KubernetesPodOperator(
         task_id="dbt_airflow_k8s_run",
         name="dbt-task-run",
         namespace="airflow-dbt",
         in_cluster=True,
-        image="ghcr.io/dbt-labs/dbt-postgres:1.2.3",
-        arguments=[f"run"],
+        image=DOCKER_IMAGE,
+        arguments=["run"],
+        env_vars=env_dict,
+        is_delete_operator_pod=True,
+    )
+
+with DAG(
+    dag_id="kubernetes_dbt_test", default_args=default_args, schedule_interval="@daily"
+) as dag_test:
+
+    task = KubernetesPodOperator(
+        task_id="dbt_airflow_k8s_run",
+        name="dbt-task-run",
+        namespace="airflow-dbt",
+        in_cluster=True,
+        image=DOCKER_IMAGE,
+        arguments=["test"],
         env_vars=env_dict,
         is_delete_operator_pod=True,
     )
