@@ -42,7 +42,7 @@ helm repo add airflow-stable https://airflow-helm.github.io/charts
 helm upgrade --install \
   "$AIRFLOW_NAME" \
   airflow-stable/airflow \
-  --namespace "$AIRFLOW_NAMESPACE" \
+  --namespace "airflow-dbt" \
   --version "8.6.1" \
   --values ./values.yml \
   --create-namespace \
