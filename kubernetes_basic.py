@@ -44,7 +44,7 @@ with DAG(
     )
 
     test_task = KubernetesPodOperator(
-        task_id="dbt_airflow_k8s_run",
+        task_id="dbt_airflow_k8s_test",
         name="dbt-task-test",
         namespace="airflow-dbt",
         in_cluster=True,
