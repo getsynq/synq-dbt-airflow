@@ -39,7 +39,7 @@ with DAG(
         in_cluster=True,
         image=DOCKER_IMAGE,
         cmds=["bash", "-cex"],
-        arguments=[f"sync-dbt run; " f"exit 1; "],
+        arguments=["sleep 300"],
         env_vars=env_dict,
         is_delete_operator_pod=False,
     )
