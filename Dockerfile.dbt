@@ -1,5 +1,6 @@
 FROM ghcr.io/dbt-labs/dbt-postgres:1.2.3
 ENV SYNQ_VERSION=v1.2.3
+RUN apk add --no-cache wget
 RUN wget -O /usr/bin/synq-dbt https://github.com/getsynq/synq-dbt/releases/download/${SYNQ_VERSION}/synq-dbt-amd64-linux && \
     chmod +x /usr/bin/synq-dbt
 COPY dbt_example/profiles.yml /root/.dbt/
