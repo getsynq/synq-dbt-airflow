@@ -40,7 +40,7 @@ with DAG(
         image=DOCKER_IMAGE,
         arguments=["run"],
         env_vars=env_dict,
-        is_delete_operator_pod=True,
+        is_delete_operator_pod=False,
     )
 
     test_task = KubernetesPodOperator(
