@@ -121,7 +121,7 @@ def create_gitsync_init_container():
 ###
 
 with DAG(
-    dag_id="kubernetes", default_args=default_args, schedule_interval="@daily"
+    dag_id="kubernetes_advanced", default_args=default_args, schedule_interval="@daily"
 ) as dag:
 
     volumes = []
@@ -143,8 +143,8 @@ with DAG(
         init_containers.append(init_container)
 
     task = KubernetesPodOperator(
-        task_id="dbt_airflow_k8s",
-        name="dbt-task",
+        task_id="dbt_airflow_k8s_advanced",
+        name="dbt-task-advanced",
         namespace=NAMESPACE,
         in_cluster=True,
         image="ghcr.io/dbt-labs/dbt-postgres:1.2.3",
