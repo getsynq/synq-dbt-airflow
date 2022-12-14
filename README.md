@@ -15,6 +15,8 @@ Make sure that docker works:
 docker version
 ```
 
+You will need the SYNQ_TOKEN to send dbt output to Synq.io
+
 ## Installation
 
 ### Create local kubernetes cluster
@@ -31,6 +33,11 @@ kubectl cluster-info --context kind-kind
 In the next step we will install Airflow to our local Kubernetes cluster.
 
 We will do that with Helm and we use airflow-helm chart for that https://github.com/airflow-helm/charts/tree/main/charts/airflow .
+
+As a part of installation 2 additional python packages are installed:
+
+- `airflow-dbt` that provides the Dbt*Operators
+- `dbt-postgres` that provides the `dbt` command and support for Postgres
 
 Before we install it you might want to edit [the Helm values.yml file](values.yml). The installations is configured in a way that it will periodically pull this repository with git from https://github.com/getsynq/synq-dbt-airflow.git and add it to the `dags` folder.
 
@@ -50,17 +57,17 @@ helm upgrade --install \
 ```
 This can take a while (5 minutes).
 
-### Install Synq dbt
+## Synq-dbt and DbtOperatorPlugin DAGs
 
-#### Get the Synq dbt wrapper binary
+### Get the Synq dbt wrapper binary
 
 To integrate with synq, you have to install the dbt wrapper program from synq. https://github.com/getsynq/synq-dbt
 
-For production we recommend you add the `synq-dbt` binary to the Airflow image with other dependencies that you need to run your DAGs.
+For production we recommend you add the `synq-dbt` binary to the Airflow image with other dependencies that you need to run your DAGs. In [the basic DbtPlugin example](airflow_dbt_plugin_dags.py) we use [an Airflow image that has synq-dbt preinstalled](Dockerfile.airflow).
 
-In this example repository we have created a DAG that installs the synq dbt on to the worker, but it will not persist if the worker is restarted. It's triggered as a part of dbt dag that sends data to synq.
+In [the advanced DbtPlugin example](airflow_dbt_plugin_advanced_dags.py) we have created a DAG that installs the synq dbt on to the worker, but it will not persist if the worker is restarted. Installation is triggered every DAG start.
 
-#### Set the Synq token
+### Set the Synq token
 
 The Synq dbt wrapper needs `SYNQ_TOKEN` to be set. The airflow dbt plugin is currently not supporting `env` passing via the `Dbt*` operators. So we have to set the `SYNQ_TOKEN` in 2 places:
 
@@ -69,7 +76,7 @@ Firstly, set the variable `SYNQ_TOKEN` in Airflow. In the top navbar go to **Adm
 
 ![Synq variable token](doc/img/synq_variable.jpg)
 
-Secondly, set the token as environment variable for the pods. This will only be needed until the dbt airflow plugin releases a new version.
+Secondly, set the token as environment variable for the pods. This will only be needed until the dbt airflow plugin releases a new version. Currently the DbtOperator is not passing trough the environment variables like `SYNQ_TOKEN`
 
 Edit [the Helm values.yml file](values.yml) and update the token. Then upgrade the airflow release.
 
@@ -78,12 +85,27 @@ Edit [the Helm values.yml file](values.yml) and update the token. Then upgrade t
 helm upgrade --install \
   "$AIRFLOW_NAME" \
   airflow-stable/airflow \
-  --namespace "$AIRFLOW_NAMESPACE" \
+  --namespace "airflow-dbt" \
   --version "8.6.1" \
   --values ./values.yml \
   --create-namespace \
   --wait
 ```
+
+## Synq-dbt and KubernetesOperator DAGs
+
+If you want to use `synq-dbt` with Kubernetes operator you have to add 2 things
+to the image/container that will be used in the kubernetes Job/Pod
+
+- `synq-dbt`
+- the dbt project
+
+You have to pass the `SYNQ_TOKEN` to the Kubernetes Operator.
+
+In [the basic Kubernetes example](kubernetes_basic_dags.py) we use [a docker image that has the `synq-dbt` and dbt project in the image itself](Dockerfile.dbt).
+
+In [the advanced example](kubernetes_advanced_dags.py) we install `synq-dbt` and we `git clone` our dbt project in seperate Kubernetes init containers.
+
 
 ## How to use
 
@@ -97,7 +119,7 @@ kubectl -n airflow port-forward service/airflow-web 8080
 
 Open your browser http://localhost:8080
 
-### Run the DAG
+### Run the DAGs
 
 The dbt project has 2 simple models that will create one table and one view in the `airflow` database/`dbt_example` schema.
 
@@ -112,7 +134,7 @@ After a few seconds the DAG should complete successful.
 
 ### Connect to Postgresql
 
-`kubectl -n airflow port-forward service/airflow-postgresql 5432`
+`kubectl -n airflow-dbt port-forward service/airflow-postgresql 5432`
 
 You can now use your database client to inspect the database.
 
