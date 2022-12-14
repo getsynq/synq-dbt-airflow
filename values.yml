@@ -15,7 +15,7 @@ dags:
 airflow:
 
   image:
-      repository: hcr.io/getsynq/airflow-synq-dbt
+      repository: ghcr.io/getsynq/airflow-synq-dbt
       tag: "1.0.0"
 
   extraPipPackages:
