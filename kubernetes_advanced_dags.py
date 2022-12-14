@@ -35,7 +35,8 @@ DBT_PROFILES_DIR = Variable.get(
 
 
 env_dict = {"SYNQ_TOKEN": SYNQ_TOKEN, "DBT_PROFILES_DIR": DBT_PROFILES_DIR}
-env_dict.update(Variable.get("SYNQ_OBJECT", {}, deserialize_json=True))
+# Config JSON object for overrides OPTIONAL
+env_dict.update(Variable.get("CONFIG_OBJECT", {}, deserialize_json=True))
 # Filter key value pairs that have value None
 env_dict = {k: v for k, v in env_dict.items() if v is not None}
 

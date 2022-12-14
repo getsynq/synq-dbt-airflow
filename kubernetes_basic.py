@@ -1,18 +1,16 @@
-import os
-
 from airflow import DAG
 from airflow.models import Variable
 from airflow.providers.cncf.kubernetes.operators.kubernetes_pod import (
     KubernetesPodOperator,
 )
 from airflow.utils.dates import days_ago
-from kubernetes.client import models as k8s
 
 # SYNQ_TOKEN is requred to authenticate with SYNQ
 SYNQ_TOKEN = Variable.get("SYNQ_TOKEN", default_var=None)
 
 env_dict = {"SYNQ_TOKEN": SYNQ_TOKEN}
-env_dict.update(Variable.get("SYNQ_OBJECT", {}, deserialize_json=True))
+# Config JSON object for overrides OPTIONAL
+env_dict.update(Variable.get("CONFIG_OBJECT", {}, deserialize_json=True))
 default_args = {
     "start_date": days_ago(0),
     "env": env_dict,

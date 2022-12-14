@@ -17,7 +17,12 @@ default_args = {
 }
 
 default_args_synq = default_args.copy()
-default_args_synq.update({"env": {"SYNQ_TOKEN": synq_token}, "dbt_bin": "synq-dbt"})
+
+env_dict = {"SYNQ_TOKEN": synq_token}
+# Config JSON object for overrides OPTIONAL
+env_dict.update(Variable.get("CONFIG_OBJECT", {}, deserialize_json=True))
+
+default_args_synq.update({"env": env_dict, "dbt_bin": "synq-dbt"})
 
 ###
 # DAGs
