@@ -13,6 +13,11 @@ dags:
       gid: 50000
 
 airflow:
+
+  image:
+      repository: ghcr.io/getsynq/airflow-synq-dbt
+      tag: "1.0.0"
+
   extraPipPackages:
     - "airflow-dbt==0.4.0"
     - "dbt-postgres==1.2.0" # If dbt-core 1.3.0 is used there is a jinja2 conflict with airflow itself

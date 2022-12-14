@@ -4,7 +4,7 @@ dbt_example:
   outputs:
     dev:
       type: postgres
-      host: airflow-postgresql.airflow.svc.cluster.local
+      host: airflow-postgresql.airflow-dbt.svc.cluster.local
       user: postgres
       password: airflow
       port: 5432
