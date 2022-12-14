@@ -27,7 +27,7 @@ default_args = {
 }
 
 default_args_synq = default_args.copy()
-default_args_synq.update({"env": {"SYNQ_TOKEN": synq_token}, "dbt-bin": "synq-dbt"})
+default_args_synq.update({"env": {"SYNQ_TOKEN": synq_token}, "dbt_bin": "synq-dbt"})
 
 ###
 # DAGs
