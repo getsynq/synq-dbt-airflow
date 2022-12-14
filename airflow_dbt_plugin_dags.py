@@ -31,7 +31,11 @@ default_args_synq.update({"env": env_dict, "dbt_bin": "synq-dbt"})
 ###
 # Vanilla dbt run
 ###
-with DAG(dag_id="dbt", default_args=default_args, schedule_interval="@daily") as dag:
+with DAG(
+    dag_id="airflow_dbt_plugin_without_synq_dag",
+    default_args=default_args,
+    schedule_interval="@daily",
+) as dag:
 
     dbt_seed = DbtSeedOperator(task_id="dbt_seed")
 
@@ -54,7 +58,9 @@ with DAG(dag_id="dbt", default_args=default_args, schedule_interval="@daily") as
 ##
 
 with DAG(
-    dag_id="dbt_with_synq", default_args=default_args_synq, schedule_interval="@daily"
+    dag_id="airflow_dbt_plugin_basic_dag",
+    default_args=default_args_synq,
+    schedule_interval="@daily",
 ) as dag_synq:
 
     dbt_seed = DbtSeedOperator(task_id="dbt_seed_synq")
