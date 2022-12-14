@@ -1,7 +1,3 @@
-import os
-import stat
-import urllib.request
-
 from airflow import DAG
 from airflow.models import Variable
 from airflow_dbt.operators.dbt_operator import (
@@ -10,12 +6,6 @@ from airflow_dbt.operators.dbt_operator import (
     DbtRunOperator,
     DbtTestOperator,
 )
-from airflow.operators.python import (
-    ShortCircuitOperator,
-    PythonOperator,
-)
-
-from airflow.operators.trigger_dagrun import TriggerDagRunOperator
 from airflow.utils.dates import days_ago
 
 synq_token = Variable.get("SYNQ_TOKEN", default_var=None)
@@ -33,7 +23,9 @@ default_args_synq.update({"env": {"SYNQ_TOKEN": synq_token}, "dbt_bin": "synq-db
 # DAGs
 ###
 
-# Vanilla dbt
+###
+# Vanilla dbt run
+###
 with DAG(dag_id="dbt", default_args=default_args, schedule_interval="@daily") as dag:
 
     dbt_seed = DbtSeedOperator(task_id="dbt_seed")
@@ -51,7 +43,9 @@ with DAG(dag_id="dbt", default_args=default_args, schedule_interval="@daily") as
 
 
 ##
-# Dbt reporting to synq
+# Dbt reporting to synq with synq-dby
+# IMPORTANT: Because of a missing feature the SYNQ_TOKEN is not passed via the DbtOperator
+#            you need to start the Airflow worker process with the SYNQ_TOKEN environment variable set
 ##
 
 with DAG(
