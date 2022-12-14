@@ -23,7 +23,7 @@ DOCKER_IMAGE = "ghcr.io/getsynq/dbt-postgres-synq-dbt:1.0.0"
 ###
 
 with DAG(
-    dag_id="kubernetes_dbt_with_synq",
+    dag_id="kubernetes_basic_dag",
     default_args=default_args,
     schedule_interval="@daily",
 ) as dag_run:

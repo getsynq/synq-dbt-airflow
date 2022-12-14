@@ -39,7 +39,8 @@ default_args_synq.update({"env": env_dict, "dbt_bin": "/opt/airflow/bin/synq-dbt
 # For production you can add SYNQ dbt to your airflow Docker image at image build time
 ##
 with DAG(
-    dag_id="dag_install_synq_dbt",
+    dag_id="z_helper_dag_install_synq_dbt",
+    description="DAG that install synq-dbt into Airflow",
     default_args=default_args,
     schedule_interval=None,
     is_paused_upon_creation=False,
@@ -70,7 +71,7 @@ with DAG(
 ##
 
 with DAG(
-    dag_id="dbt_with_synq_advanced",
+    dag_id="airflow_dbt_plugin_advanced_dag",
     default_args=default_args_synq,
     schedule_interval="@daily",
 ) as dag_synq:
@@ -80,8 +81,8 @@ with DAG(
     )
 
     install_synq_dbt = TriggerDagRunOperator(
-        task_id="install_synq_dby",
-        trigger_dag_id="dag_install_synq_dbt",
+        task_id="install_synq_dbt",
+        trigger_dag_id="z_helper_dag_install_synq_dbt",
         wait_for_completion=True,
     )
 

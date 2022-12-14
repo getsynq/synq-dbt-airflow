@@ -122,7 +122,9 @@ def create_gitsync_init_container():
 ###
 
 with DAG(
-    dag_id="kubernetes_advanced", default_args=default_args, schedule_interval="@daily"
+    dag_id="kubernetes_advanced_dag",
+    default_args=default_args,
+    schedule_interval="@daily",
 ) as dag:
 
     volumes = []
