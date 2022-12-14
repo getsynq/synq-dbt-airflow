@@ -123,9 +123,9 @@ Open your browser http://localhost:8080
 
 The dbt project has 2 simple models that will create one table and one view in the `airflow` database/`dbt_example` schema.
 
-Click on the trigger DAG (red `1` circle)
+Click on the "play" button of the DAG you want to start and select `Trigger DAG`
 
-![Airflow home view](doc/img/home.jpg)
+![Airflow home view](doc/img/home2.jpg)
 
 After a few seconds the DAG should complete successful.
 
