@@ -50,7 +50,7 @@ with DAG(
         dbt_bin = default_args_synq["dbt_bin"]
         dbt_bin_dir = os.path.dirname(dbt_bin)
 
-        SYNQ_VERSION = Variable.get("SYNQ_VERSION", "v1.2.3")
+        SYNQ_VERSION = Variable.get("SYNQ_VERSION", "v1.3.0-rc0")
         URL = f"https://github.com/getsynq/synq-dbt/releases/download/{SYNQ_VERSION}/synq-dbt-amd64-linux"
 
         if not os.path.exists(dbt_bin_dir):

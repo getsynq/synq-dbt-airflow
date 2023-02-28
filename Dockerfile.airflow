@@ -1,5 +1,5 @@
 FROM apache/airflow:2.2.5-python3.8
-ENV SYNQ_VERSION=v1.2.3
+ENV SYNQ_VERSION=v1.3.0-rc0
 
 # Install synq-dbt
 USER root
