@@ -54,7 +54,7 @@ default_args = {
 # If your image does not include synq-dbt binary, you can install it before your Kubernetes Operators starts
 def create_synq_dbt_init_container():
     # Synq-dbt version to install
-    SYNQ_DBT_VERSION = Variable.get("SYNQ_DBT_VERSION", default_var="v1.3.0")
+    SYNQ_DBT_VERSION = Variable.get("SYNQ_DBT_VERSION", default_var="v1.3.1")
 
     synqdbt_volume = k8s.V1Volume(
         name="synqdbt-data", empty_dir=k8s.V1EmptyDirVolumeSource()
