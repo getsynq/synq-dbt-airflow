@@ -100,7 +100,7 @@ with DAG(
 
     dbt_docs_generate = DbtDocsGenerateOperator(
         task_id="dbt_docs_generate_synq",
-        retrries=0,
+        retries=0,
     )
 
     (
