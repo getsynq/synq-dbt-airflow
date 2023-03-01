@@ -8,6 +8,7 @@ from airflow_dbt.operators.dbt_operator import (
     DbtBaseOperator
 )
 from airflow.utils.dates import days_ago
+from airflow.utils.decorators import apply_defaults
 
 synq_token = Variable.get("SYNQ_TOKEN", default_var=None)
 
