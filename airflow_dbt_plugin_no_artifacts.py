@@ -41,12 +41,20 @@ class DbtCompileOperator(DbtBaseOperator):
     def execute(self, context):
         self.create_hook().run_cli('compile')
 
+class DbtDebugOperator(DbtBaseOperator):
+    @apply_defaults
+    def __init__(self, profiles_dir=None, target=None, *args, **kwargs):
+        super(DbtDebugOperator, self).__init__(profiles_dir=profiles_dir, target=target, *args, **kwargs)
+
+    def execute(self, context):
+        self.create_hook().run_cli('debug')
+
 with DAG(
     dag_id="airflow_dbt_plugin_compile_only",
     default_args=default_args_synq,
     schedule_interval="@daily",
 ) as dag_synq:
 
-    dbt_compile = DbtCompileOperator(task_id="dbt_compile_synq")
+    dbt_debug = DbtDebugOperator(task_id="dbt_debug_synq")
 
-    (dbt_compile)
+    (dbt_debug)
