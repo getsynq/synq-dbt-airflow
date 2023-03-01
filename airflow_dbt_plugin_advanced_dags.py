@@ -97,6 +97,11 @@ with DAG(
         retries=0,  # Failing tests would fail the task, and we don't want Airflow to try again
     )
 
+    dbt_docs_generate = DbtDocsGenerateOperator(
+        task_id="dbt_docs_generate_synq",
+        retries=0,
+    )
+
     (
         synq_token_defined
         >> install_synq_dbt
@@ -104,4 +109,5 @@ with DAG(
         >> dbt_snapshot
         >> dbt_run
         >> dbt_test
+        >> dbt_docs_generate
     )
