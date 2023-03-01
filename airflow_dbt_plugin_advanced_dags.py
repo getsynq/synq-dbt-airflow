@@ -9,6 +9,7 @@ from airflow_dbt.operators.dbt_operator import (
     DbtSnapshotOperator,
     DbtRunOperator,
     DbtTestOperator,
+    DbtDocsGenerateOperator,
 )
 from airflow.operators.python import (
     ShortCircuitOperator,
@@ -99,7 +100,7 @@ with DAG(
 
     dbt_docs_generate = DbtDocsGenerateOperator(
         task_id="dbt_docs_generate_synq",
-        retries=0,
+        retrries=0,
     )
 
     (
