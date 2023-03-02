@@ -19,6 +19,7 @@ from airflow.operators.python import (
 from datahub_provider.entities import Dataset, Urn
 from airflow.lineage.entities import Table
 from airflow.operators.dummy import DummyOperator
+from airflow.operators.bash import BaseOperator
 from airflow.lineage import AUTO
 from airflow.operators.trigger_dagrun import TriggerDagRunOperator
 from airflow.utils.dates import days_ago
@@ -93,7 +94,7 @@ with DAG(
         wait_for_completion=True,
     )
 
-    copy_tables = DummyOperator(task_id="copy_tables", inlets=AUTO, outlets=[
+    copy_tables = BashOperator("echo foo", task_id="copy_tables", inlets=[AUTO, Table(database="bigquery-db-from", cluster="schema-maybe", name="table-name")], outlets=[
         Table(database="bigquery-db", cluster="schema-maybe", name="table-name"),
         Dataset("snowflate", "db.schema.table"),
         AUTO,
