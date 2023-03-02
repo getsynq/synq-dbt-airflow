@@ -16,6 +16,10 @@ from airflow.operators.python import (
     PythonOperator,
 )
 
+from datahub_provider.entities import Dataset, Urn
+from airflow.lineage.entities import Table
+from airflow.operators.empty import EmptyOperator
+from airflow.lineage import AUTO
 from airflow.operators.trigger_dagrun import TriggerDagRunOperator
 from airflow.utils.dates import days_ago
 
@@ -33,7 +37,9 @@ env_dict = {"SYNQ_TOKEN": synq_token}
 # Config JSON object for overrides OPTIONAL
 env_dict.update(Variable.get("CONFIG_OBJECT", {}, deserialize_json=True))
 
-default_args_synq.update({"env": env_dict, "dbt_bin": "/opt/airflow/bin/synq-dbt"})
+default_args_synq.update(
+    {"env": env_dict, "dbt_bin": "/opt/airflow/bin/synq-dbt"}
+)
 
 ##
 # Install latest Synq dbt
@@ -87,6 +93,13 @@ with DAG(
         wait_for_completion=True,
     )
 
+    copy_tables = EmptyOperator(task_id="copy_tables", inlets=AUTO, outlets=[
+        Table("bigquery-db", "schema-maybe", "table-name"),
+        Urn(
+            "dbt-sh-d28816dc-7bba-11ed-bdbb-c465160955e4::model.dbt_example.my_first_dbt_model"
+        ),
+    ])
+
     dbt_seed = DbtSeedOperator(task_id="dbt_seed_synq")
 
     dbt_snapshot = DbtSnapshotOperator(task_id="dbt_snapshot_synq")
@@ -106,6 +119,7 @@ with DAG(
     (
         synq_token_defined
         >> install_synq_dbt
+        >> copy_tables
         >> dbt_seed
         >> dbt_snapshot
         >> dbt_run
