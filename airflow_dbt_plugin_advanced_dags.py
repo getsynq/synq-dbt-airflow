@@ -19,7 +19,7 @@ from airflow.operators.python import (
 from datahub_provider.entities import Dataset, Urn
 from airflow.lineage.entities import Table
 from airflow.operators.dummy import DummyOperator
-from airflow.operators.bash import BaseOperator
+from airflow.operators.bash import BashOperator
 from airflow.lineage import AUTO
 from airflow.operators.trigger_dagrun import TriggerDagRunOperator
 from airflow.utils.dates import days_ago
