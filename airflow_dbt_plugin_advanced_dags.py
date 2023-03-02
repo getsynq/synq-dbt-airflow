@@ -18,7 +18,7 @@ from airflow.operators.python import (
 
 from datahub_provider.entities import Dataset, Urn
 from airflow.lineage.entities import Table
-from airflow.operators.empty import EmptyOperator
+from airflow.operators.dummy import DummyOperator
 from airflow.lineage import AUTO
 from airflow.operators.trigger_dagrun import TriggerDagRunOperator
 from airflow.utils.dates import days_ago
@@ -93,11 +93,12 @@ with DAG(
         wait_for_completion=True,
     )
 
-    copy_tables = EmptyOperator(task_id="copy_tables", inlets=AUTO, outlets=[
+    copy_tables = DummyOperator(task_id="copy_tables", inlets=AUTO, outlets=[
         Table("bigquery-db", "schema-maybe", "table-name"),
         Urn(
             "dbt-sh-d28816dc-7bba-11ed-bdbb-c465160955e4::model.dbt_example.my_first_dbt_model"
         ),
+        AUTO,
     ])
 
     dbt_seed = DbtSeedOperator(task_id="dbt_seed_synq")
