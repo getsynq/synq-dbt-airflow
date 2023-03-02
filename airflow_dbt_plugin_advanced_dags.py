@@ -94,7 +94,7 @@ with DAG(
         wait_for_completion=True,
     )
 
-    copy_tables = BashOperator("echo foo", task_id="copy_tables", inlets=[AUTO, Table(database="bigquery-db-from", cluster="schema-maybe", name="table-name")], outlets=[
+    copy_tables = BashOperator(cmd="echo foo", task_id="copy_tables", inlets=[AUTO, Table(database="bigquery-db-from", cluster="schema-maybe", name="table-name")], outlets=[
         Table(database="bigquery-db", cluster="schema-maybe", name="table-name"),
         Dataset("snowflate", "db.schema.table"),
         AUTO,
