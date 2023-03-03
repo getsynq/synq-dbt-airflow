@@ -94,11 +94,7 @@ with DAG(
         wait_for_completion=True,
     )
 
-    copy_tables = BashOperator(bash_command="echo foo", task_id="copy_tables", inlets=[AUTO, Table(database="bigquery-db-from", cluster="schema-maybe", name="table-name")], outlets=[
-        Table(database="bigquery-db", cluster="schema-maybe", name="table-name"),
-        Dataset("snowflate", "db.schema.table"),
-        AUTO,
-    ])
+    copy_tables = BashOperator(bash_command="echo foo", task_id="copy_tables")
 
     dbt_seed = DbtSeedOperator(task_id="dbt_seed_synq")
 
