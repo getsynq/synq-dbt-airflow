@@ -11,7 +11,7 @@
 
 with source_data as (
 
-    select 1 as id
+    select floor(random() * 10 + 1)::int as id
     union all
     select null as id
 
