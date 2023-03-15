@@ -3,7 +3,7 @@ FROM ghcr.io/dbt-labs/dbt-postgres:1.2.3
 ENTRYPOINT ["synq-dbt"]
 WORKDIR /usr/app/
 
-ENV SYNQ_VERSION=v1.3.1
+ENV SYNQ_VERSION=v1.4.0
 
 # Install synq-dbt
 RUN apt-get update && \
