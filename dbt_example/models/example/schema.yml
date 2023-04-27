@@ -10,7 +10,7 @@ models:
           - unique
           - not_null
           - accepted_values:
-              values: [1, 3, 7, 9]
+              values: [0, 1, 2, 3, 4, 5]
               quote: false
 
   - name: my_second_dbt_model
